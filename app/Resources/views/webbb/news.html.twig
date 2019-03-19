@@ -1,0 +1,86 @@
+{## app/Resources/views/blog/news.html.twig #}
+{% extends '::base.html.twig' %}
+
+{% block title %} Your calendar {% endblock %}
+
+{% block content %}
+
+					<div class="row">
+							<div class="col-md-12">
+									<h2><b> {{ news.getTitle }} </b></h2>
+							</div>
+					</div>
+
+					<div class="fh5co-spacer-md"></div>
+
+					<div class="row fh5co-row-padded">
+
+							<div class="col-md-6 col-md-offset-1">
+									<p>
+									<img alt="Embedded Image" src="data:image/png;base64,{{ images }}" class="img-rounded img-responsive"/>
+									</p>
+							</div>
+
+							<div class="col-md-6 col-md-offset-4">
+
+										{% if is_granted('ROLE_ADMIN') %}
+
+														<td>
+														<a class ="btn btn-primary btn-block"
+														href="{{ path('deletenews', {'id_news': news.getId} )}}">Delete News</a>
+														</td>
+
+														<td>
+														<a class ="btn btn-primary btn-block"
+														href="{{ path('updatenews', {'id_news': news.getId} )}}">Update News</a>
+														</td>
+
+									 {% endif %}
+
+									<hr>
+									<p><i>{{ news.getPublishDate|date('Y-m-d H:i:s') }}</i></p>
+
+									<br>
+									<br>
+
+									 <p><b>{{ news.getDescription }} </b></p>
+
+									 <p>{{ news.getTheNews }} </p>
+
+									 <p>Tags:
+											{% for tvshows in news.getTvshows %}
+											<b>{{ tvshows.getName }}, </b>
+											{% endfor %}
+
+											{% for movies in news.getMovies %}
+											<b>{{ movies.getName }}, </b>
+											{% endfor %}
+									</p>
+
+					</div>
+
+
+					<div class="fh5co-spacer-lg"></div>
+					<div class="fh5co-spacer-lg"></div>
+					<div class="fh5co-spacer-lg"></div>
+
+
+					<div class="row fh5co-row-padded">
+							<div class="col-md-8 col-md-offset-1">
+
+							<h5><b>Here is what other users thought about this news:</b></h5>
+							<hr style="width:120%">
+
+							{{ render(controller('AppBundle:Comments:commentsNews', {'id_news': news.getId } )) }}
+								{% block comments %}
+								{% endblock %}
+
+								<p>They'd like to hear your opinion too!
+								<a class ="btn btn-primary btn-sm"
+								href="{{ path('addcomment', {'id': news.getId, 'belongsTo': "news" }) }}">Add Comment</a></p>
+
+							</div>
+					</div>
+
+
+{% endblock %}

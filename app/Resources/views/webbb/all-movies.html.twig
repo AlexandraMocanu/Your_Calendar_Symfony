@@ -1,0 +1,30 @@
+{# app/Resources/views/blog/my-movies.html.twig #}
+{% extends '::base.html.twig' %}
+
+{% block title %} All Movies {% endblock %}
+
+{% block content %}
+
+
+
+      <div class="row">
+        <div id="fh5co-board" data-columns>
+
+        {% for key, movies in movies %}
+
+            <div class="item">
+              <div class="animate-box">
+                <a href="/movie/{{movies.getId}}" title="{{movies.getName}}" >
+                <img alt="Embedded Image" src="data:image/png;base64,{{images[key]}}" class="img-rounded img-responsive"/></a>
+              </div>
+            </div>
+
+        {% endfor %}
+
+		   </div>
+    </div>
+
+
+
+
+{% endblock %}

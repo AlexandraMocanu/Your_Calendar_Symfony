@@ -1,0 +1,42 @@
+{# app/Resources/views/blog/commentsUser.html.twig #}
+{% extends '::base.html.twig' %}
+
+{% block title %} Comments by user {% endblock %}
+
+{% block content %}
+
+{% if comments == null %}
+
+    <h2>You haven't given any comments yet. :(</h2>
+
+{% endif %}
+
+<ul>
+    {% for comments in comments %}
+
+              <li>
+              <h1>{{ comments.getTitle }}</h1>
+              <hr style="width:100%">
+              <p>{{ comments.getComment }}</p>
+              <p><i>Published by: </i>{{ comments.getUser }} on <i>{{ comments.getPublished|date('Y-m-d H:i:s') }}</i></p>
+
+              {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+
+                      <td>
+                      <a class ="btn btn-primary btn-md"
+                      href="{{ path('deletecomment', {'id_comment': comments.getId} )}}">Delete Comment</a>
+                      </td>
+
+                      <td>
+                      <a class ="btn btn-primary btn-md"
+                      href="{{ path('updatecomment', {'id_comment': comments.getId} )}}">Update Comment</a>
+                      </td>
+
+             {% endif %}
+
+             </li>
+
+    {% endfor %}
+</ul>
+
+{% endblock %}

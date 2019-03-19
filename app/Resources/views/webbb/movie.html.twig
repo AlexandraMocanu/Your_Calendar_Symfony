@@ -1,0 +1,216 @@
+{#app/Resources/views/blog/movie.html.twig ##}
+{% extends '::base.html.twig' %}
+
+{% for movie, image in movie %}
+
+{% block title %} {{movie.getName()}} {% endblock %}
+
+{% block content %}
+				<div class="row">
+						<div class="col-md-12">
+								<h2><b> {{movie.getName()}} </b></h2>
+						</div>
+				</div>
+
+				<div class="fh5co-spacer-md"></div>
+
+				<div class="row fh5co-row-padded">
+
+						<div class="col-md-6 col-md-offset-1">
+								<p>
+								<img class="img-responsive img-rounded" alt="Embedded Image" src="data:image/png;base64,{{image}}"/>
+								</p>
+						</div>
+
+
+						<div class="col-md-6 col-md-offset-4">
+								<h5><b>Show description</b></h5>
+								<hr style="width:100%">
+								<b><p>{{movie.getDescription()}}</p></b>
+
+								{{ movie.getTotalRating|rating }}
+								<b>Rating:</b> {{ movie.getTotalRating}}
+								<br>Rated by {{ movie.getRatings.count() }} users.
+
+								<div class="fh5co-spacer-md"></div>
+
+								{% set sub = "" %}
+								{% for user in movie.getUsers %}
+										{% if user == app.user %}
+												{% set sub = 'subscribed' %}
+										{% endif %}
+								{% endfor %}
+
+								{% if sub != 'subscribed' %}
+										<td>
+										<a class ="btn btn-sm btn-primary btn-block"
+										href="{{ path('subscribe_movie', {'id_movie': movie.getId }) }}">Subscribe movie</a>
+										</td>
+								{% else %}
+										<td>
+										<a class ="btn btn-sm btn-primary btn-block"
+										href="{{ path('unsubscribe_movie', {'id_movie': movie.getId }) }}">Unsubscribe</a>
+										</td>
+								{% endif %}
+						</div>
+
+				</div>
+
+				<div class="fh5co-spacer-lg"></div>
+				<div class="fh5co-spacer-lg"></div>
+				<div class="fh5co-spacer-lg"></div>
+				<div class="fh5co-spacer-lg"></div>
+
+				<div class="row fh5co-row-padded">
+						<div class="col-md-6 col-md-offset-1">
+
+									<h5><b>Show info</b></h5>
+									<hr style="width:60%">
+									 <p><b>Premiere date:</b> {{movie.getPremiere()|date("d/m/Y")}}
+									 <br><b>Genre:</b> {{movie.getGenre}}
+									 <br><b>Runtime:</b> {{movie.getRuntime}}
+									 <br><b>Budget:</b> {{movie.getBudget}}
+									 <br><b>Box Office:</b> {{movie.getBoxoffice}}
+									 <br><b>Created by:</b> {{movie.getCreatedby}}
+
+									{% set foo = "" %}
+									{% set rate = "" %}
+									{% for rating in movie.getRatings %}
+											{% if rating.getGivenBy == app.user %}
+													{% set foo = 'rated' %}
+													{% set rate = rating.getId %}
+											{% endif %}
+									{% endfor %}
+
+									{% if foo == 'rated' %}
+
+												{% block rating %}
+												{{ movie.getTotalRating|rating }}
+												<br><b>Rating:</b> {{ movie.getTotalRating}}
+												<br>Rated by {{ movie.getRatings.count() }} users.
+												{% endblock %}
+
+												<br><a class ="btn btn-xs btn-primary"
+												href="{{ path('deleterating', {'id_rating': rate }) }}">Remove my rating</a>
+									{% endif %}
+
+									{% if foo != 'rated' %}
+												{{ render(controller('AppBundle:Ratings:saveRatingmovie', { 'id_movie': movie.getId })) }}
+									{% endif %}
+
+									 <br><b>More info:</b>
+									 <br><a href="{{movie.getTvcom}}">Rotten Tomatoes</a>
+									 <br><a href="{{movie.getImdb}}">IMDb</a>
+									 </p>
+
+						</div>
+
+						<div class="clearfix visible-md-block center-block"></div>
+
+						<div class="col-md-6 col-md-offset-5">
+
+										<h5><b>Show Trailer</b></h5>
+										<hr style="width:90%">
+										<iframe width="480" height="290" src="{{movie.getTrailer}}" frameborder="0" allowfullscreen></iframe>
+
+						</div>
+				</div>
+
+
+				<div class="fh5co-spacer-lg"></div>
+				<div class="fh5co-spacer-lg"></div>
+				<div class="fh5co-spacer-lg"></div>
+				<div class="fh5co-spacer-lg"></div>
+
+				<div class="row fh5co-row-padded">
+						<div class="col-md-6 col-md-offset-1">
+
+										<h5><b>Premieres</b></h5>
+										<hr style="width:60%">
+
+										{% set previous = "" %}
+										{% set next = "" %}
+										{% for premiere in movie.getPremieres %}
+												{% if premiere.getDate|date('U') < 'now'|date('U') %}
+														{% set previous = premiere %}
+												{% endif %}
+												{% if premiere.getDate|date('U') > 'now'|date('U') %}
+														{% set next = premiere %}
+												{% endif %}
+										{% endfor %}
+
+										<h3>Previous Premiere</h3>
+										{% if previous != "" %}
+											<h1> {{ previous.getCountry }} </h1>
+											<p> Premiere date: {{ previous.getDate|date('Y-m-d') }}
+											<br>
+											<a href="{{ path('premiere', {'id_premiere': previous.getId }) }}"> See article. </a> </p>
+										{% else %}
+											<p> Unfortunately, we have no data about the previous premiere. </p>
+										{% endif %}
+
+										<h3>Next Premiere</h3>
+										{% if next == TRUE %}
+											<b> {{ next.getCountry }} </b>
+											<p> Premiere date: {{ next.getDate|date('Y-m-d') }}
+											<br>
+											<a href="{{ path('premiere', {'id_premiere': next.getId }) }}"> See article. </a> </p>
+										{% else %}
+											<p> Unfortunately, we have no data about the next premiere. </p>
+										{% endif %}
+
+
+										{% if is_granted('ROLE_ADMIN') %}
+													 <a class ="btn btn-primary btn-sm"
+													 href="{{ path('addpremiere', {'id': movie.getId}) }}">Add Premiere</a>
+										{% endif %}
+
+										<br>
+										<a class ="btn btn-primary btn-sm"
+										href="{{ path('premieresmovie', {'id_movie': movie.getId }) }}">Premiere list</a>
+
+						</div>
+
+						<div class="clearfix visible-md-block center-block"></div>
+
+						<div class="col-md-6 col-md-offset-5">
+
+										<h5><b>Latest news</b></h5>
+										<hr style="width:90%">
+										{{ render(controller('AppBundle:Newsfeed:newsfeedMovie', {'id_movie': movie.getId, 'max': 5} )) }}
+										{% block news %}
+										{% endblock %}
+
+										<a class ="btn btn-primary btn-sm"
+										href="{{ path('newsfeed_by_movie', {'id_movie': movie.getId }) }}">More News</a>
+
+						</div>
+				</div>
+
+				<div class="fh5co-spacer-lg"></div>
+				<div class="fh5co-spacer-lg"></div>
+				<div class="fh5co-spacer-lg"></div>
+
+				<div class="row fh5co-row-padded">
+						<div class="col-md-8 col-md-offset-1">
+
+									<h5><b>Here is what other users thought about this movie:</b></h5>
+									<hr style="width:120%">
+									{{ render(controller('AppBundle:Comments:commentsMovie', {'id_movie': movie.getId } )) }}
+									{% block comments %}
+
+									{% endblock %}
+
+									<p>They'd like to hear your opinion too!
+									<br>
+									<a class ="btn btn-primary btn-sm"
+									href="{{ path('addcomment', {'id': movie.getId, 'belongsTo': "movie" }) }}">Add Comment</a></p>
+						</div>
+				</div>
+
+
+
+{% endblock %}
+
+
+{% endfor %}

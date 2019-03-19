@@ -1,0 +1,37 @@
+{# app/Resources/views/blog/premieres.html.twig #}
+{% extends '::base.html.twig' %}
+
+{% block content %}
+
+{% if premieres == null %}
+
+    <h2>There are no premieres for this movie. :(</h2>
+
+{% endif %}
+
+<ul>
+{% for premieres in premieres %}
+
+          <li>
+          <p><b>Country: </b>{{ premieres.getCountry }} on <i>{{ premieres.getDate|date('Y-m-d') }}</i></p>
+
+          {% if is_granted('ROLE_ADMIN')%}
+
+                <td>
+                <a class ="btn btn-primary btn-block"
+                href="{{ path('deletepremiere', {'id_premiere': premieres.getId} )}}">Delete Premiere</a>
+                </td>
+
+                <td>
+                <a class ="btn btn-primary btn-block"
+                href="{{ path('updatepremiere', {'id_premiere': premieres.getId} )}}">Update Premiere</a>
+                </td>
+
+         {% endif %}
+
+          </li>
+
+{% endfor %}
+</ul>
+
+{% endblock %}

@@ -1,0 +1,32 @@
+{# app/Resources/views/blog/comments.html.twig #}
+
+{% block comments %}
+
+<ul>
+{% for comments in comments %}
+
+          <li>
+          <b>{{ comments.getTitle }}</b>
+          <p>{{ comments.getComment }}</p>
+          <p><i>Published by: </i>{{ comments.getUser }} on {{ comments.getPublished|date('Y-m-d H:i:s') }}</p>
+
+          {% if is_granted('IS_AUTHENTICATED_FULLY') and comments.getUser == app.user%}
+
+                <td>
+                <a class ="btn btn-primary btn-xs"
+                href="{{ path('deletecomment', {'id_comment': comments.getId} )}}">Delete Comment</a>
+                </td>
+
+                <td>
+                <a class ="btn btn-primary btn-xs"
+                href="{{ path('updatecomment', {'id_comment': comments.getId} )}}">Update Comment</a>
+                </td>
+
+         {% endif %}
+
+          </li>
+
+{% endfor %}
+</ul>
+
+{% endblock %}

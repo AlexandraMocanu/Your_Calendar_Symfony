@@ -1,0 +1,42 @@
+{% extends '::base.html.twig' %}
+
+{% block title %} Your calendar {% endblock %}
+
+{% block content %}
+
+					<div class="row">
+							<div class="col-md-12">
+									<h2><b> {{ user.username }}'s Profile </b></h2>
+                  <hr style="width:90%">
+							</div>
+					</div>
+
+          <div class="fh5co-spacer-md"></div>
+
+					<div class="row fh5co-row-padded">
+
+              <div class="col-md-8 col-md-offset-1">
+                  <h4><b>Email: </b> {{ user.email }}</h4>
+                  <br>
+
+                  <a class ="btn btn-primary btn-md"
+									href="{{ path('full-calendar-limit') }}">My calendar</a></p>
+
+                  <a class ="btn btn-primary btn-md"
+                  href="{{ path('my-tvshows') }}">TVShows I'm subscribed to</a></p>
+
+                  <a class ="btn btn-primary btn-md"
+                  href="{{ path('my-movies') }}">Movies I'm subscribed to.</a></p>
+
+                  <a class ="btn btn-primary btn-md"
+                  href="{{ path('newsfeed_by_user') }}">My newsfeed</a></p>
+
+                  <a class ="btn btn-primary btn-md"
+                  href="{{ path('comments_by_user') }}">Comments I've made</a></p>
+
+
+              </div>
+
+					</div>
+
+{% endblock %}

@@ -1,0 +1,27 @@
+{# app/Resources/views/blog/newsfeed.html.twig #}
+
+{% extends '::base.html.twig' %}
+
+{% block title %} Newsfeed {% endblock %}
+
+{% block content %}
+
+{% if news == null %}
+
+    <h2>There are no news here yet. :(</h2>
+
+{% endif %}
+
+<ul>
+    {% for news in news %}
+        <li>
+        <h1>{{ news.getTitle }}</h1>
+        <hr style="width:80%">
+            <p>{{ news.getDescription }}</p>
+            <a href="{{ path('news', {'id_news': news.getId }) }}">More ...</a>
+
+        </li>
+     {% endfor %}
+</ul>
+
+{% endblock %}

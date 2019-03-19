@@ -1,0 +1,175 @@
+{# app/Resources/views/blog/index.html.twig #}
+{% extends '::base.html.twig' %}
+
+{% block content %}
+
+<div id="fh5co-main">
+  <div class="container">
+    <div class="row">
+      <div id="fh5co-board" data-columns>
+
+          <div class="item">
+            <div class="animate-box">
+              <a href="/tvshow/1" title="American Gods" ><img src="{{asset('assets/images/web/tvshows/americangods/americangods.jpg')}}"/></a>
+            </div>
+          </div>
+
+          <div class="item">
+            <div class="animate-box">
+              <a href="/tvshow/2" title="Game Of Thrones"><img src="{{asset('assets/images/web/tvshows/gameofthrones/got.jpg')}}"></a>
+            </div>
+          </div>
+
+          <div class="item">
+            <div class="animate-box">
+              <a href="/movie/1" title="12 Angry Men" ><img src="{{asset('assets/images/web/movies/12angrymen/12angrymen.jpg')}}"></a>
+            </div>
+          </div>
+
+          <div class="item">
+            <div class="animate-box">
+              <a href="/movie/10" title="Fight Club"><img src="{{asset('assets/images/web/movies/fight_club/fightclub.jpg')}}"></a>
+            </div>
+          </div>
+
+          <div class="item">
+            <div class="animate-box">
+              <a href="/tvshow/4" title="Grey's Anatomy"><img src="{{asset('assets/images/web/tvshows/greysanatomy/greys.jpg')}}"></a>
+            </div>
+          </div>
+
+          <div class="item">
+            <div class="animate-box">
+              <a href="/movie/6" title="The Dark Knight"><img src="{{asset('assets/images/web/movies/darkknight/darknight.jpg')}}"></a>
+            </div>
+          </div>
+
+          <div class="item">
+            <div class="animate-box">
+              <a href="/tvshow/6" title="Inhumans"><img src="{{asset('assets/images/web/tvshows/inhumans/inhumans.jpg')}}"></a>
+            </div>
+          </div>
+
+          <div class="item">
+            <div class="animate-box">
+              <a href="/movie/2" title="The Godfather"><img src="{{asset('assets/images/web/movies/godfather/godfather.jpg')}}"></a>
+            </div>
+          </div>
+
+          <div class="item">
+            <div class="animate-box">
+              <a href="/tvshow/5" title="Modern Family"><img src="{{asset('assets/images/web/tvshows/modernfamily/modernfamily.jpg')}}"></a>
+            </div>
+          </div>
+
+          <div class="item">
+            <div class="animate-box">
+              <a href="/movie/5" title="The Godfather II"><img src="{{asset('assets/images/web/movies/godfather2/godfather2.jpg')}}"></a>
+            </div>
+          </div>
+
+          <div class="item">
+            <div class="animate-box">
+              <a href="/tvshow/7" title="Narcos"><img src="{{asset('assets/images/web/tvshows/narcos/narcos.jpg')}}" ></a>
+            </div>
+          </div>
+
+          <div class="item">
+            <div class="animate-box">
+              <a href="/movie/9" title="Lord Of The Rings"><img src="{{asset('assets/images/web/movies/lordoftherings1/lordoftherings.jpg')}}"></a>
+            </div>
+          </div>
+
+          <div class="item">
+            <div class="animate-box">
+              <a href="/tvshow/8" title="Rick And Morty"><img src="{{asset('assets/images/web/tvshows/rickandmorty/rickmorty.jpg')}}" ></a>
+            </div>
+          </div>
+
+          <div class="item">
+            <div class="animate-box">
+              <a href="/movie/3" title="Pulp fiction"><img src="{{asset('assets/images/web/movies/pulp_fiction/pulp_fiction.jpg')}}"></a>
+            </div>
+          </div>
+
+          <div class="item">
+            <div class="animate-box">
+              <a href="/tvshow/9" title="Stranger Things"><img src="{{asset('assets/images/web/tvshows/strangerthings/strangerthings.jpg')}}" ></a>
+            </div>
+          </div>
+
+          <div class="item">
+            <div class="animate-box">
+              <a href="/movie/7" title="Schindler's List"><img src="{{asset('assets/images/web/movies/schindlers_list/schindlers_list.jpg')}}" ></a>
+            </div>
+          </div>
+
+          <div class="item">
+            <div class="animate-box">
+              <a href="/tvshow/10" title="Supernatural" ><img src="{{asset('assets/images/web/tvshows/supernatural/supernatural.jpg')}}" ></a>
+            </div>
+          </div>
+
+          <div class="item">
+            <div class="animate-box">
+              <a href="/movie/4" title="Shawshank Redemption"><img src="{{asset('assets/images/web/movies/shawshank_redemption/shawshank.jpg')}}"></a>
+            </div>
+          </div>
+
+          <div class="item">
+            <div class="animate-box">
+              <a href="/tvshow/3" title="American Horror Story"><img src="{{asset('assets/images/web/tvshows/americanhorrorstory/americanhstory.jpg')}}"></a>
+            </div>
+          </div>
+
+          <div class="item">
+            <div class="animate-box">
+              <a href="/movie/8" title="The Good, The Bad, and The Ugly" ><img src="{{asset('assets/images/web/movies/thegoodthebadtheugly/goodbadugly.jpg')}}"></a>
+            </div>
+          </div>
+
+          {% if is_granted('ROLE_ADMIN') %}
+
+          <div class="item">
+               <div class="animate-box">
+                   <td>
+                   <a class ="btn btn-primary btn-block"
+                   href="{{ path('addnews') }}">Add News</a>
+                   </td>
+          </div></div>
+
+          {% endif %}
+
+          <div class="item">
+               <div class="animate-box">
+                   <div class="col-md-6 padding-0">
+                   <td>
+                   <a class ="btn btn-primary btn-block"
+                   href="{{ path('newsfeed_all') }}">Newsfeed All</a>
+                   </td>
+
+                   <td>
+                   <a class ="btn btn-primary btn-block"
+                   href="{{ path('newsfeed_by_user') }}">Newsfeed By User</a>
+                   </td>
+
+          </div></div></div>
+
+          <div class="item">
+               <div class="animate-box">
+                   <div class="col-md-6 padding-0">
+                   <td>
+                   <a class ="btn btn-primary btn-block"
+                   href="{{ path('comments_by_user') }}">Comments By User</a>
+                   </td>
+
+           </div></div></div>
+
+
+
+</div>
+</div>
+</div>
+</div>
+
+{% endblock %}

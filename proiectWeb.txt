@@ -1,0 +1,19 @@
+Aplicatie web de tipul next-episode.net si imdb.com
+
+Specificatii:
+- utilizatorul are o lista de seriale si filme
+- lista poate fi modificata in orice moment (ex. adaugare/stergere serial/film, schimbare rating/comentariu)
+- fiecare serial sau film din lista vor avea un rating si/sau un comentariu dat de utilizator
+- utilizatorul va putea dispune de un calendar in care i se arata data urmatorului episod din serial si/sau premiera unui anumit film 
+(utilizatorul va putea alege daca un anumit serial/film apare in calendar sau nu)
+- fiecare serial/film sa dispuna de o sectiune "latest news"
+
+Cerinte:
+- prima pagina sa contina doar optiunile de login/logout, un mesaj de bun venit si lista de seriale/filme sub forma de blocuri
+- prima pagina a unui utilizator sa cuprinda doar "latest news" a serialelor/filmelor la care este abonat
+- bara de meniu (care apare atunci cand utilizatorul este logat) va contine calendarul, link catre cont, link catre lista de seriale, 
+link catre lista de filme, link catre o pagina care nu tine cont de utlizator si afiseaza stirile tuturor serialelor/filmelor cat si 
+stiri despre site, link de logout.
+- fiecare pagina de serial/film va avea o descriere, sectiunea de stiri, sectiunea de comentarii
+- fiecare pagina de utilizator va avea o descriere si o sectiune unde sunt aratate comentariile lasate de utilizator, dar si o sectiune unde
+sunt aratate serialele/filmele la care utilizatorul este abonat

@@ -1,0 +1,48 @@
+{# app/Resources/views/blog/tvshow_episodes.html.twig #}
+{% extends '::base.html.twig' %}
+
+{% for tvshow in tvshow %}
+
+{% block title %} Episodes of {{ tvshow.getName }} {% endblock %}
+
+{% endfor %}
+
+{% block content %}
+
+{% if episodes == null %}
+
+    <h2>There are no episodes for this tvshow yet. :(</h2>
+
+{% endif %}
+
+<ul>
+
+    {% for episodes in episodes %}
+
+              <li>
+              <h1><a href="{{ path('episode', {'id': episodes.getId }) }}"> {{ episodes.getName }} </a></h1>
+              <hr style="width:100%">
+              <b> Season {{episodes.getSeason}}, Episode {{episodes.getNumberInSeason}} </b>
+              <br>
+              <p>{{ episodes.getDescription }}</p>
+
+              {% if is_granted('ROLE_ADMIN') %}
+
+                      <td>
+                      <a class ="btn btn-primary btn-md"
+                      href="{{ path('deleteepisode', {'id_episode': episodes.getId} )}}">Delete Episode</a>
+                      </td>
+
+                      <td>
+                      <a class ="btn btn-primary btn-md"
+                      href="{{ path('updateepisode', {'id_episode': episodes.getId} )}}">Update episode</a>
+                      </td>
+
+             {% endif %}
+
+             </li>
+
+    {% endfor %}
+</ul>
+
+{% endblock %}

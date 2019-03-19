@@ -1,0 +1,218 @@
+{# #app/Resources/views/blog/tvshow.html.twig ##}
+{% extends '::base.html.twig' %}
+
+{% for tvshow, image in tvshow %}
+
+{% block title %} {{tvshow.getName()}} {% endblock %}
+
+{% block content %}
+				<div class="row">
+						<div class="col-md-12">
+								<h2><b> {{tvshow.getName()}} </b></h2>
+						</div>
+				</div>
+
+				<div class="fh5co-spacer-md"></div>
+
+				<div class="row fh5co-row-padded">
+
+						<div class="col-md-6 col-md-offset-1">
+								<p>
+								<img class="img-responsive img-rounded" alt="Embedded Image" src="data:image/png;base64,{{image}}"/>
+								</p>
+						</div>
+
+
+						<div class="col-md-6 col-md-offset-4">
+								<h5><b>Show description</b></h5>
+								<hr style="width:100%">
+								<b><p>{{tvshow.getDescription()}}</p></b>
+
+								{{ tvshow.getTotalRating|rating }}
+								<b>Rating:</b> {{ tvshow.getTotalRating}}
+								<br>Rated by {{ tvshow.getRatings.count() }} users.
+
+								<div class="fh5co-spacer-md"></div>
+
+								{% set sub = "" %}
+								{% for user in tvshow.getUsers %}
+										{% if user == app.user %}
+												{% set sub = 'subscribed' %}
+										{% endif %}
+								{% endfor %}
+
+								{% if sub != 'subscribed '%}
+										<td>
+										<a class ="btn btn-sm btn-primary btn-block"
+										href="{{ path('subscribe_tvshow', {'id_tvshow': tvshow.getId }) }}">Subscribe tvshow</a>
+										</td>
+								{% else %}
+										<td>
+										<a class ="btn btn-sm btn-primary btn-block"
+										href="{{ path('unsubscribe_tvshow', {'id_tvshow': tvshow.getId }) }}">Unsubscribe</a>
+										</td>
+								{% endif %}
+						</div>
+
+				</div>
+
+				<div class="fh5co-spacer-lg"></div>
+				<div class="fh5co-spacer-lg"></div>
+				<div class="fh5co-spacer-lg"></div>
+				<div class="fh5co-spacer-lg"></div>
+
+				<div class="row fh5co-row-padded">
+						<div class="col-md-6 col-md-offset-1">
+
+									<h5><b>Show info</b></h5>
+									<hr style="width:60%">
+									 <p><b>Premiere date:</b> {{tvshow.getPremiere()|date("d/m/Y")}}
+									 <br><b>Genre:</b> {{tvshow.getGenre}}
+									 <br><b>Airs on:</b>  {{tvshow.getAirson}}
+									 <br><b>Runtime:</b> {{tvshow.getRuntime}}
+									 <br><b>Status:</b> {{tvshow.getStatus}}
+									 <br><b>Created by:</b> {{tvshow.getCreatedby}}
+
+									{% set foo = "" %}
+									{% set rate = "" %}
+									{% for rating in tvshow.getRatings %}
+											{% if rating.getGivenBy == app.user %}
+													{% set foo = 'rated' %}
+													{% set rate = rating.getId %}
+											{% endif %}
+									{% endfor %}
+
+									{% if foo == 'rated' %}
+
+												{% block rating %}
+												{{ tvshow.getTotalRating|rating }}
+												<br><b>Rating:</b> {{ tvshow.getTotalRating}}
+												<br>Rated by {{ tvshow.getRatings.count() }} users.
+												{% endblock %}
+
+												<br><a class ="btn btn-xs btn-primary"
+												href="{{ path('deleterating', {'id_rating': rate }) }}">Remove my rating</a>
+									{% endif %}
+
+									{% if foo != 'rated' %}
+												{{ render(controller('AppBundle:Ratings:saveRatingTVShow', { 'id_tvshow': tvshow.getId })) }}
+									{% endif %}
+
+									 <br><b>More info:</b>
+									 <br><a href="{{tvshow.getTvcom}}">TV.com</a>
+									 <br><a href="{{tvshow.getImdb}}">IMDb</a>
+									 </p>
+
+						</div>
+
+						<div class="clearfix visible-md-block center-block"></div>
+
+						<div class="col-md-6 col-md-offset-5">
+
+										<h5><b>Show Trailer</b></h5>
+										<hr style="width:90%">
+										<iframe width="480" height="290" src="{{tvshow.getTrailer}}" frameborder="0" allowfullscreen></iframe>
+
+						</div>
+				</div>
+
+
+				<div class="fh5co-spacer-lg"></div>
+				<div class="fh5co-spacer-lg"></div>
+				<div class="fh5co-spacer-lg"></div>
+				<div class="fh5co-spacer-lg"></div>
+
+				<div class="row fh5co-row-padded">
+						<div class="col-md-6 col-md-offset-1">
+
+										<h5><b>Episodes</b></h5>
+										<hr style="width:60%">
+
+										{% set previous = "" %}
+										{% set next = "" %}
+										{% for episode in tvshow.getEpisodes %}
+												{% if episode.getPremiere|date('U') < 'now'|date('U') %}
+														{% set previous = episode %}
+												{% endif %}
+												{% if episode.getPremiere|date('U') > 'now'|date('U') %}
+														{% set next = episode %}
+												{% endif %}
+										{% endfor %}
+
+										<h6><b>Previous Episode</b></h6>
+										{% if previous != "" %}
+											<b> S{{ previous.getSeason }}.E{{ previous.getNumberInSeason }} -
+											<a href="{{ path('episode', {'id': previous.getId }) }}"> {{ previous.getName }} </a> </b>
+											<p> Premiere date: {{ previous.getPremiere|date('Y-m-d') }} </p>
+										{% else %}
+											<p> Unfortunately, we have no data about the previous episode. </p>
+										{% endif %}
+
+										<h6><b>Next Episode</b></h6>
+										{% if next == TRUE %}
+											<b> S{{ next.getSeason }}.E{{ next.getNumberInSeason }} -
+											<a href="{{ path('episode', {'id': previous.getId }) }}"> {{ next.getName }} </a> </b>
+											<p> Premiere date: {{ next.getPremiere|date('Y-m-d') }} </p>
+										{% else %}
+											<p> Unfortunately, we have no data about the next episode. </p>
+										{% endif %}
+
+										{% if is_granted('ROLE_ADMIN') %}
+
+										<a class ="btn btn-primary btn-sm btn-block"
+										href="{{ path('addepisode', {'id': tvshow.getId}) }}">Add Episode</a>
+
+										{% endif %}
+
+										<br>
+										<a class ="btn btn-primary btn-sm"
+										href="{{ path('episodes_by_tvshow', {'id': tvshow.getId }) }}">Episode list</a>
+
+						</div>
+
+						<div class="clearfix visible-md-block center-block"></div>
+
+						<div class="col-md-6 col-md-offset-5">
+
+										<h5><b>Latest news</b></h5>
+										<hr style="width:90%">
+										{{ render(controller('AppBundle:Newsfeed:newsfeedTVShow', {'id_tvshow': tvshow.getId, 'max': 5} )) }}
+										{% block news %}
+										{% endblock %}
+
+										<a class ="btn btn-primary btn-sm"
+										href="{{ path('newsfeed_by_tvshow', {'id_tvshow': tvshow.getId }) }}">More News</a>
+
+						</div>
+				</div>
+
+				<div class="fh5co-spacer-lg"></div>
+				<div class="fh5co-spacer-lg"></div>
+				<div class="fh5co-spacer-lg"></div>
+				<div class="fh5co-spacer-lg"></div>
+				<div class="fh5co-spacer-lg"></div>
+				<div class="fh5co-spacer-lg"></div>
+
+				<div class="row fh5co-row-padded">
+						<div class="col-md-8 col-md-offset-1">
+
+									<h5><b>Here is what other users thought about this tvshow:</b></h5>
+									<hr style="width:120%">
+									{{ render(controller('AppBundle:Comments:commentsTVShow', {'id_tvshow': tvshow.getId } )) }}
+									{% block comments %}
+
+									{% endblock %}
+
+									<p>They'd like to hear your opinion too!
+									<br>
+									<a class ="btn btn-primary btn-sm"
+									href="{{ path('addcomment', {'id': tvshow.getId, 'belongsTo': "tvshow" }) }}">Add Comment</a></p>
+						</div>
+				</div>
+
+
+
+{% endblock %}
+
+
+{% endfor %}

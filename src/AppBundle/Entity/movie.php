@@ -1,0 +1,715 @@
+<?php
+
+namespace AppBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+
+/**
+ * @ORM\Entity(repositoryClass="AppBundle\Entity\movieRepository")
+ * @ORM\Table(name="movie")
+ */
+class movie
+{
+  /**
+   * @ORM\Column(type="integer")
+   * @ORM\Id
+   * @ORM\GeneratedValue(strategy="AUTO")
+   */
+    private $id;
+
+    /**
+     * @ORM\Column(type="string", length=100)
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $type;
+
+    /**
+     * @ORM\Column(type="string", length=100)
+     */
+    private $name;
+
+    /**
+     * @ORM\Column(type="text")
+     */
+    private $description;
+
+    /**
+     * @ORM\Column(type="date")
+     */
+    private $premiere;
+
+    /**
+     * @ORM\Column(type="blob")
+     */
+    private $picture;
+
+    /**
+     * @ORM\Column(type="text")
+     */
+    private $genre;
+
+    /**
+     * @ORM\Column(type="text")
+     */
+    private $budget;
+
+    /**
+     * @ORM\Column(type="text")
+     */
+    private $runtime;
+
+    /**
+     * @ORM\Column(type="text")
+     */
+    private $boxoffice;
+
+    /**
+     * @ORM\Column(type="text")
+     */
+    private $createdby;
+
+    /**
+     * @ORM\Column(type="text")
+     */
+    private $imdb;
+
+    /**
+     * @ORM\Column(type="text")
+     */
+    private $tvcom;
+
+    /**
+     * @ORM\Column(type="text")
+     */
+    private $trailer;
+
+
+    /**
+     *@var \Doctrine\Common\Collections\ArrayCollection
+     * Many Movies have Many Users.
+     * @ORM\ManyToMany(targetEntity="User", mappedBy="movies", cascade={"persist"})
+     */
+    private $users;
+
+    /**
+    *@var \Doctrine\Common\Collections\ArrayCollection
+    * Many movies have many news
+    * @ORM\ManyToMany(targetEntity="news", inversedBy="movies", cascade={"persist"})
+    * @ORM\JoinTable(name="movie_news",
+    *                 joinColumns={
+    *                     @ORM\JoinColumn(name="movie_id", referencedColumnName="id", nullable=true)
+    *                 },
+    *                 inverseJoinColumns={
+    *                     @ORM\JoinColumn(name="news_id", referencedColumnName="id", nullable=true)
+    *                 }
+    * )
+    */
+    private $news;
+
+    /**
+     *@var \Doctrine\Common\Collections\ArrayCollection
+     * One movie has many comments.
+     * @ORM\OneToMany(targetEntity="comments", mappedBy="belongsToMovie", cascade={"persist"})
+     */
+    private $comments;
+
+    /**
+    *One movie has many ratings given
+    *@var \Doctrine\Common\Collections\ArrayCollection
+    *@ORM\OneToMany(targetEntity="ratings", mappedBy="belongsToMovie", cascade={"persist"})
+    *ratings keeps track of all ratings given
+    */
+    private $ratings;
+
+    /**
+    *@ORM\Column(type="float")
+    */
+    private $totalRating;
+
+    /**
+    *One movie has many premieres in different countries
+    *@var \Doctrine\Common\Collections\ArrayCollection
+    *@ORM\OneToMany(targetEntity="premieres", mappedBy="belongsToMovie", cascade={"persist"})
+    */
+    private $premieres;
+
+    public function __construct() {
+        $this->type = "movie";
+        $this->users = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->news = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->comments = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->ratings = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->premieres = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+
+    /**
+     * Get id
+     *
+     * @return integer
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set name
+     *
+     * @param string $name
+     *
+     * @return movie
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    /**
+     * Get name
+     *
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * Set description
+     *
+     * @param string $description
+     *
+     * @return movie
+     */
+    public function setDescription($description)
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+
+    /**
+     * Get description
+     *
+     * @return string
+     */
+    public function getDescription()
+    {
+        return $this->description;
+    }
+
+    /**
+     * Set premiere
+     *
+     * @param \DateTime $premiere
+     *
+     * @return movie
+     */
+    public function setPremiere($premiere)
+    {
+        $this->premiere = $premiere;
+
+        return $this;
+    }
+
+    /**
+     * Get premiere
+     *
+     * @return \DateTime
+     */
+    public function getPremiere()
+    {
+        return $this->premiere;
+    }
+
+    /**
+     * Set picture
+     *
+     *
+     *
+     * @return movie
+     */
+    public function setPicture( $picture)
+    {
+        $this->picture = $picture;
+
+        return $this;
+    }
+
+    /**
+     * Get picture
+     *
+     * @return \LONGBLOB
+     */
+    public function getPicture()
+    {
+        return $this->picture;
+    }
+
+    /**
+     * Add user
+     *
+     * @param \AppBundle\Entity\User $user
+     *
+     * @return movie
+     */
+    public function addUser(\AppBundle\Entity\User $user)
+    {
+        $this->users[] = $user;
+
+        return $this;
+    }
+
+    /**
+     * Remove user
+     *
+     * @param \AppBundle\Entity\User $user
+     */
+    public function removeUser(\AppBundle\Entity\User $user)
+    {
+        $this->users->removeElement($user);
+    }
+
+    /**
+     * Get users
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getUsers()
+    {
+        return $this->users;
+    }
+
+    /**
+     * Add news
+     *
+     * @param \AppBundle\Entity\news $news
+     *
+     * @return movie
+     */
+    public function addNews(\AppBundle\Entity\news $news)
+    {
+        $this->news[] = $news;
+
+        return $this;
+    }
+
+    /**
+     * Remove news
+     *
+     * @param \AppBundle\Entity\news $news
+     */
+    public function removeNews(\AppBundle\Entity\news $news)
+    {
+        $this->news->removeElement($news);
+    }
+
+    /**
+     * Get news
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getNews()
+    {
+        return $this->news;
+    }
+
+    public function __toString()
+    {
+      return $this->getName();
+    }
+
+    /**
+     * Add comment
+     *
+     * @param \AppBundle\Entity\comments $comment
+     *
+     * @return movie
+     */
+    public function addComment(\AppBundle\Entity\comments $comment)
+    {
+        $this->comments[] = $comment;
+
+        return $this;
+    }
+
+    /**
+     * Remove comment
+     *
+     * @param \AppBundle\Entity\comments $comment
+     */
+    public function removeComment(\AppBundle\Entity\comments $comment)
+    {
+        $this->comments->removeElement($comment);
+    }
+
+    /**
+     * Get comments
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getComments()
+    {
+        return $this->comments;
+    }
+
+    /**
+     * Set totalRating
+     *
+     * @param float $totalRating
+     *
+     * @return movie
+     */
+    public function setTotalRating($totalRating)
+    {
+        $this->totalRating = $totalRating;
+
+        return $this;
+    }
+
+    /**
+     * Get totalRating
+     *
+     * @return float
+     */
+    public function getTotalRating()
+    {
+        return $this->totalRating;
+    }
+
+    /**
+     * Add rating
+     *
+     * @param \AppBundle\Entity\ratings $rating
+     *
+     * @return movie
+     */
+    public function addRating(\AppBundle\Entity\ratings $rating)
+    {
+        $this->ratings[] = $rating;
+
+        return $this;
+    }
+
+    /**
+     * Remove rating
+     *
+     * @param \AppBundle\Entity\ratings $rating
+     */
+    public function removeRating(\AppBundle\Entity\ratings $rating)
+    {
+        $this->ratings->removeElement($rating);
+    }
+
+    /**
+     * Get ratings
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getRatings()
+    {
+        return $this->ratings;
+    }
+
+    /**
+     * Add premiere
+     *
+     * @param \AppBundle\Entity\premieres $premiere
+     *
+     * @return movie
+     */
+    public function addPremiere(\AppBundle\Entity\premieres $premiere)
+    {
+        $this->premieres[] = $premiere;
+
+        return $this;
+    }
+
+    /**
+     * Remove premiere
+     *
+     * @param \AppBundle\Entity\premieres $premiere
+     */
+    public function removePremiere(\AppBundle\Entity\premieres $premiere)
+    {
+        $this->premieres->removeElement($premiere);
+    }
+
+    /**
+     * Get premieres
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getPremieres()
+    {
+        return $this->premieres;
+    }
+
+    /**
+     * Set type
+     *
+     * @param string $type
+     *
+     * @return movie
+     */
+    public function setType($type)
+    {
+        $this->type = $type;
+
+        return $this;
+    }
+
+    /**
+     * Get type
+     *
+     * @return string
+     */
+    public function getType()
+    {
+        return $this->type;
+    }
+
+    /**
+     * Set genre
+     *
+     * @param string $genre
+     *
+     * @return movie
+     */
+    public function setGenre($genre)
+    {
+        $this->genre = $genre;
+
+        return $this;
+    }
+
+    /**
+     * Get genre
+     *
+     * @return string
+     */
+    public function getGenre()
+    {
+        return $this->genre;
+    }
+
+    /**
+     * Set airson
+     *
+     * @param string $airson
+     *
+     * @return movie
+     */
+    public function setAirson($airson)
+    {
+        $this->airson = $airson;
+
+        return $this;
+    }
+
+    /**
+     * Get airson
+     *
+     * @return string
+     */
+    public function getAirson()
+    {
+        return $this->airson;
+    }
+
+    /**
+     * Set runtime
+     *
+     * @param string $runtime
+     *
+     * @return movie
+     */
+    public function setRuntime($runtime)
+    {
+        $this->runtime = $runtime;
+
+        return $this;
+    }
+
+    /**
+     * Get runtime
+     *
+     * @return string
+     */
+    public function getRuntime()
+    {
+        return $this->runtime;
+    }
+
+    /**
+     * Set status
+     *
+     * @param string $status
+     *
+     * @return movie
+     */
+    public function setStatus($status)
+    {
+        $this->status = $status;
+
+        return $this;
+    }
+
+    /**
+     * Get status
+     *
+     * @return string
+     */
+    public function getStatus()
+    {
+        return $this->status;
+    }
+
+    /**
+     * Set createdby
+     *
+     * @param string $createdby
+     *
+     * @return movie
+     */
+    public function setCreatedby($createdby)
+    {
+        $this->createdby = $createdby;
+
+        return $this;
+    }
+
+    /**
+     * Get createdby
+     *
+     * @return string
+     */
+    public function getCreatedby()
+    {
+        return $this->createdby;
+    }
+
+    /**
+     * Set imdb
+     *
+     * @param string $imdb
+     *
+     * @return movie
+     */
+    public function setImdb($imdb)
+    {
+        $this->imdb = $imdb;
+
+        return $this;
+    }
+
+    /**
+     * Get imdb
+     *
+     * @return string
+     */
+    public function getImdb()
+    {
+        return $this->imdb;
+    }
+
+    /**
+     * Set tvcom
+     *
+     * @param string $tvcom
+     *
+     * @return movie
+     */
+    public function setTvcom($tvcom)
+    {
+        $this->tvcom = $tvcom;
+
+        return $this;
+    }
+
+    /**
+     * Get tvcom
+     *
+     * @return string
+     */
+    public function getTvcom()
+    {
+        return $this->tvcom;
+    }
+
+    /**
+     * Set trailer
+     *
+     * @param string $trailer
+     *
+     * @return movie
+     */
+    public function setTrailer($trailer)
+    {
+        $this->trailer = $trailer;
+
+        return $this;
+    }
+
+    /**
+     * Get trailer
+     *
+     * @return string
+     */
+    public function getTrailer()
+    {
+        return $this->trailer;
+    }
+
+    /**
+     * Set budget
+     *
+     * @param string $budget
+     *
+     * @return movie
+     */
+    public function setBudget($budget)
+    {
+        $this->budget = $budget;
+
+        return $this;
+    }
+
+    /**
+     * Get budget
+     *
+     * @return string
+     */
+    public function getBudget()
+    {
+        return $this->budget;
+    }
+
+    /**
+     * Set boxoffice
+     *
+     * @param string $boxoffice
+     *
+     * @return movie
+     */
+    public function setBoxoffice($boxoffice)
+    {
+        $this->boxoffice = $boxoffice;
+
+        return $this;
+    }
+
+    /**
+     * Get boxoffice
+     *
+     * @return string
+     */
+    public function getBoxoffice()
+    {
+        return $this->boxoffice;
+    }
+}

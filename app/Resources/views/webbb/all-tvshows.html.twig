@@ -1,0 +1,25 @@
+{## app/Resources/views/blog/tvshow.html.twig #}
+{% extends '::base.html.twig' %}
+
+{% block title %} All TVShows {% endblock %}
+
+{% block content %}
+
+
+      <div class="row">
+        <div id="fh5co-board" data-columns>
+
+          {% for key, tvshows in tvshows %}
+
+            <div class="item">
+              <div class="animate-box">
+                <a href="/tvshow/{{tvshows.getId}}" title="{{tvshows.getName}}" >
+                <img alt="Embedded Image" src="data:image/png;base64,{{images[key]}}" class="img-rounded img-responsive"/></a>
+              </div>
+            </div>
+
+            {% endfor %}
+       </div>
+    </div>
+
+{% endblock %}

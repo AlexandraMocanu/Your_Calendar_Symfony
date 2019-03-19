@@ -1,0 +1,37 @@
+{# app/Resources/views/blog/my-movies.html.twig #}
+{% extends '::base.html.twig' %}
+
+{% block title %} {{ app.user }}'s Movies {% endblock %}
+
+{% block content %}
+
+{% if movies == null %}
+
+    <h2>You haven't subscribed to any movies yet. :(</h2>
+
+{% endif %}
+
+
+<div class="row">
+  <div id="fh5co-board" data-columns>
+
+    {% for key, movies in movies %}
+
+      <div class="item">
+        <div class="animate-box">
+          <a href="/movie/{{movies.getId}}" title="{{movies.getName}}" >
+          <img alt="Embedded Image" src="data:image/png;base64,{{images[key]}}" class="img-rounded img-responsive"/></a>
+          <br>
+          <a class ="btn btn-primary btn-sm"
+          href="{{ path('unsubscribe_movie', {'id_movie': movies.getId }) }}">Unsubscribe</a>
+
+          <a class ="btn btn-primary btn-sm"
+          href="{{ path('newsfeed_by_movie', {'id_movie': movies.getId }) }}">News</a>
+        </div>
+      </div>
+
+      {% endfor %}
+ </div>
+</div>
+
+{% endblock %}

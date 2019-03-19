@@ -1,0 +1,55 @@
+{## app/Resources/views/blog/premieres.html.twig #}
+{% extends '::base.html.twig' %}
+
+{% for premiere in premiere %}
+
+{% block title %} {{premiere.getBelongsToMovie.getName()}} {% endblock %}
+
+{% block content %}
+				<div class="row">
+						<div class="col-md-12">
+								<h2><b> {{episode.getBelongsToMovie.getName()}} </b></h2>
+						</div>
+				</div>
+
+				<div class="fh5co-spacer-md"></div>
+
+				<div class="row fh5co-row-padded">
+
+						<div class="col-md-6 col-md-offset-1">
+								<p>
+								<img alt="Embedded Image" src="data:image/png;base64,{{image}}" class="img-rounded img-responsive"/>
+								</p>
+						</div>
+
+						<div class="col-md-6 col-md-offset-4">
+								<h5><b>Premiere description</b></h5>
+								<hr style="width:100%">
+
+                <h4><b>Country: </b>{{ premieres.getCountry }} on <i>{{ premieres.getDate|date('Y-m-d') }}</i></h4>
+
+
+                {% if is_granted('ROLE_ADMIN')%}
+
+                      <td>
+                      <a class ="btn btn-primary btn-block"
+                      href="{{ path('deletepremiere', {'id_premiere': premiere.getId} )}}">Delete Premiere</a>
+                      </td>
+
+                      <td>
+                      <a class ="btn btn-primary btn-block"
+                      href="{{ path('updatepremiere', {'id_premiere': premiere.getId} )}}">Update Premiere</a>
+                      </td>
+
+               {% endif %}
+
+
+						</div>
+				</div>
+
+</div>
+</div>
+
+{% endblock %}
+
+{% endfor %}

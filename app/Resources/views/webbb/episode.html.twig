@@ -1,0 +1,99 @@
+{## app/Resources/views/blog/episode.html.twig #}
+{% extends '::base.html.twig' %}
+
+{% for episode in episode %}
+
+{% block title %} {{episode.getBelongsToTVShow.getName()}} {% endblock %}
+
+{% block content %}
+				<div class="row">
+						<div class="col-md-12">
+								<h2><b> {{episode.getBelongsToTVShow.getName()}} </b></h2>
+						</div>
+				</div>
+
+				<div class="fh5co-spacer-md"></div>
+
+				<div class="row fh5co-row-padded">
+
+						<div class="col-md-6 col-md-offset-1">
+								<p>
+								<img alt="Embedded Image" src="data:image/png;base64,{{image}}" class="img-rounded img-responsive"/>
+								</p>
+						</div>
+
+						<div class="col-md-6 col-md-offset-4">
+								<h5><b><h1>{{episode.getName()}}</h1> - Episode description</b></h5>
+								<hr style="width:100%">
+								<b><p>{{episode.getDescription()}}</b></p>
+
+								{{ episode.getTotalRating|rating }}
+								<b>Rating:</b> {{ episode.getTotalRating}}
+								<br>Rated by {{ episode.getRatings.count() }} users.
+
+						</div>
+				</div>
+
+
+				<div class="fh5co-spacer-lg"></div>
+				<div class="fh5co-spacer-lg"></div>
+				<div class="fh5co-spacer-lg"></div>
+				<div class="fh5co-spacer-lg"></div>
+
+				<div class="row fh5co-row-padded">
+						<div class="col-md-6 col-md-offset-1">
+
+									<h5><b>Episode info</b></h5>
+									<hr style="width:60%">
+									 <p><b>Premiere date:</b> {{episode.getPremiere()|date("d/m/Y")}}
+									 <br><b>Genre:</b> Adventure, Mystery, Thriller, Fantasy
+									 <br><b>Airs on:</b> Starz at 9:00 pm
+									 <br><b>Runtime:</b> 60 min.
+									 <br><b>Status:</b> Returning Series
+									 <br><b>Created by:</b> Neil Gaiman, Robert Richardson
+
+
+									{% set foo = "" %}
+	 								{% set rate = "" %}
+	 								{% for rating in episode.getRatings %}
+	 										{% if rating.getGivenBy == app.user %}
+	 												{% set foo = 'rated' %}
+	 												{% set rate = rating.getId %}
+	 										{% endif %}
+	 								{% endfor %}
+
+	 								{% if foo == 'rated' %}
+
+	 								{{ episode.getTotalRating|rating }}
+	 								<p> Rated by {{ episode.getRatings.count() }} users. </p>
+
+	 								<a class ="btn btn-xs"
+	 								href="{{ path('deleterating', {'id_rating': rate }) }}">Remove rating</a>
+
+	 								{% endif %}
+
+	 								{% if foo != 'rated' %}
+
+	 								{{ render(controller('AppBundle:Ratings:saveRatingEpisode', { 'id_episode': episode.getId } )) }}
+
+	 								{% endif %}
+
+									<br><br>
+									 <td>
+									 <a class ="btn btn-primary btn-sm"
+									 href="{{ path('episodes_by_tvshow', {'id': episode.getBelongsToTVShow.getId }) }}">Other Episodes</a>
+									 </td>
+
+						</div>
+				</div>
+
+				<div class="clearfix visible-md-block center-block"></div>
+
+
+</div>
+</div>
+
+
+{% endblock %}
+
+{% endfor %}

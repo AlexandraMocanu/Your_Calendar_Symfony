@@ -1,0 +1,38 @@
+{## app/Resources/views/blog/tvshow.html.twig #}
+{% extends '::base.html.twig' %}
+
+{% block title %} {{ app.user }}'s TVShows {% endblock %}
+
+
+{% block content %}
+
+			{% if tvshows == null %}
+
+					<h2>You haven't subscribed to any tvshows yet. :(</h2>
+
+			{% endif %}
+
+
+      <div class="row">
+        <div id="fh5co-board" data-columns>
+
+          {% for key, tvshows in tvshows %}
+
+            <div class="item">
+              <div class="animate-box">
+                <a href="/tvshow/{{tvshows.getId}}" title="{{tvshows.getName}}" >
+                <img alt="Embedded Image" src="data:image/png;base64,{{images[key]}}" class="img-rounded img-responsive"/></a>
+								<br>
+								<a class ="btn btn-primary btn-sm"
+								href="{{ path('unsubscribe_tvshow', {'id_tvshow': tvshows.getId }) }}">Unsubscribe</a>
+
+								<a class ="btn btn-primary btn-sm"
+								href="{{ path('newsfeed_by_tvshow', {'id_tvshow': tvshows.getId }) }}">News</a>
+              </div>
+            </div>
+
+            {% endfor %}
+       </div>
+    </div>
+
+{% endblock %}

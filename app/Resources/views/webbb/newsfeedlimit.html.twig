@@ -1,0 +1,18 @@
+{# app/Resources/views/blog/newsfeedlimit.html.twig #}
+
+{% block news %}
+
+<ul>
+{% for news in news %}
+
+      <li>
+      <b>{{ news.getTitle }}</b>
+      <p>{{ news.getDescription }}
+      <a href="{{ path('news', {'id_news': news.getId }) }}">More ...</a>
+      </p>
+      </li>
+
+{% endfor %}
+</ul>
+
+{% endblock %}
